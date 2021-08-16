@@ -1,6 +1,6 @@
 #include "Engine.hpp"
 
-#include "KeyboardMovementController.hpp"
+#include "MovementController.hpp"
 #include "Camera.hpp"
 #include "RenderSystem.hpp"
 
@@ -27,7 +27,7 @@ namespace Engine {
         Camera camera{};
 
         auto viewerObject = GameObject::createGameObject();
-        KeyboardMovementController cameraController{};
+        MovementController cameraController{};
 
         auto currentTime = std::chrono::high_resolution_clock::now();
         while (!window.shouldClose()) {
