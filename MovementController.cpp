@@ -1,11 +1,11 @@
-#include "KeyboardMovementController.hpp"
+#include "MovementController.hpp"
 
 // std
 #include <limits>
 
 namespace Engine {
 
-    void KeyboardMovementController::moveInPlaneXZ(
+    void MovementController::moveInPlaneXZ(
         GLFWwindow* window, float dt, GameObject& gameObject) {
         glm::vec3 rotate{0};
         if (glfwGetKey(window, keys.lookRight) == GLFW_PRESS) rotate.y += 1.f;
