@@ -4,7 +4,7 @@
 #include "Window.hpp"
 
 namespace Engine {
-    class KeyboardMovementController {
+    class MovementController {
         public:
         struct KeyMappings {
             int moveLeft = GLFW_KEY_A;
