@@ -86,7 +86,7 @@ namespace Engine {
         bool checkValidationLayerSupport();
         QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice device);
         void populateDebugMessengerCreateInfo(vk::DebugUtilsMessengerCreateInfoEXT &createInfo);
-        void hasGflwRequiredInstanceExtensions();
+        void hasSdlRequiredInstanceExtensions();
         bool checkDeviceExtensionSupport(vk::PhysicalDevice device);
         SwapChainSupportDetails querySwapChainSupport(vk::PhysicalDevice device);
 

@@ -12,9 +12,6 @@
 namespace Engine {
     class Engine {
         public:
-        static constexpr int WIDTH = 800;
-        static constexpr int HEIGHT = 600;
-
         Engine();
         ~Engine();
 
@@ -26,7 +23,7 @@ namespace Engine {
         private:
         void loadGameObjects();
 
-        Window window{WIDTH, HEIGHT, "Vulkan Engine"};
+        Window window{"Vulkan Engine"};
         Device device{window};
         Renderer renderer{window, device};
 

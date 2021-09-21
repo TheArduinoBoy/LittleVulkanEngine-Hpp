@@ -17,9 +17,10 @@ namespace Engine {
 
     void Renderer::recreateSwapChain() {
         auto extent = window.getExtent();
+        SDL_Event event;
         while (extent.width == 0 || extent.height == 0) {
             extent = window.getExtent();
-            glfwWaitEvents();
+            SDL_WaitEvent(&event);
         }
         device.device().waitIdle();
 

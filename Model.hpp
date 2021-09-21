@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Buffer.hpp"
 #include "Device.hpp"
 
 // libs
@@ -54,13 +55,11 @@ namespace Engine {
 
         Device &device;
 
-        vk::Buffer vertexBuffer;
-        vk::DeviceMemory vertexBufferMemory;
+        std::unique_ptr<Buffer> vertexBuffer;
         uint32_t vertexCount;
 
         bool hasIndexBuffer = false;
-        vk::Buffer indexBuffer;
-        vk::DeviceMemory indexBufferMemory;
+        std::unique_ptr<Buffer> indexBuffer;
         uint32_t indexCount;
     };
 }
