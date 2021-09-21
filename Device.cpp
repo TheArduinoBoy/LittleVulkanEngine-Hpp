@@ -9,10 +9,10 @@
 namespace Engine {
 
     // local callback functions
-    static VKAPI_ATTR vk::Bool32 VKAPI_CALL debugCallback(
-        vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-        vk::DebugUtilsMessageTypeFlagsEXT messageType,
-        const vk::DebugUtilsMessengerCallbackDataEXT *pCallbackData,
+    static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+        VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+        VkDebugUtilsMessageTypeFlagsEXT messageType,
+        const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData,
         void *pUserData) {
         std::cerr << "validation layer: " << pCallbackData->pMessage << std::endl;
 
@@ -70,7 +70,7 @@ namespace Engine {
             throw std::runtime_error("failed to create instance!");
         }
 
-        hasGflwRequiredInstanceExtensions();
+        hasSdlRequiredInstanceExtensions();
     }
 
     void Device::pickPhysicalDevice() {
@@ -211,11 +211,11 @@ namespace Engine {
     }
 
     std::vector<const char *> Device::getRequiredExtensions() {
-        uint32_t glfwExtensionCount = 0;
-        const char **glfwExtensions;
-        glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+        uint32_t extensionCount = 0;
+        SDL_Vulkan_GetInstanceExtensions(window.getSDLwindow(), &extensionCount, nullptr);
+        std::vector<const char *> extensions(extensionCount);
+        SDL_Vulkan_GetInstanceExtensions(window.getSDLwindow(), &extensionCount, extensions.data());
 
-        std::vector<const char *> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
 
         if (enableValidationLayers) {
             extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
@@ -224,7 +224,7 @@ namespace Engine {
         return extensions;
     }
 
-    void Device::hasGflwRequiredInstanceExtensions() {
+    void Device::hasSdlRequiredInstanceExtensions() {
         uint32_t extensionCount = 0;
         vk::enumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
         std::vector<vk::ExtensionProperties> extensions(extensionCount);
@@ -242,7 +242,7 @@ namespace Engine {
         for (const auto &required : requiredExtensions) {
             std::cout << "\t" << required << std::endl;
             if (available.find(required) == available.end()) {
-                throw std::runtime_error("Missing required glfw extension");
+                throw std::runtime_error("Missing required sdl extension");
             }
         }
     }
