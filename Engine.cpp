@@ -30,9 +30,12 @@ namespace Engine {
     Engine::~Engine() {}
 
     void Engine::run() {
-        Buffer globalUboBuffer{device, sizeof(GlobalUbo), SwapChain::MAX_FRAMES_IN_FLIGHT, vk::BufferUsageFlagBits::eUniformBuffer,
-        vk::MemoryPropertyFlagBits::eHostVisible, device.properties.limits.minUniformBufferOffsetAlignment};
-        globalUboBuffer.map();
+        std::vector<std::unique_ptr<Buffer>> uboBuffers(SwapChain::MAX_FRAMES_IN_FLIGHT);
+        for(int i = 0; i < uboBuffers.size(); i++) {
+            uboBuffers[i] = std::make_unique<Buffer>(device, sizeof(GlobalUbo), 1, vk::BufferUsageFlagBits::eUniformBuffer,
+            vk::MemoryPropertyFlagBits::eHostVisible);
+            uboBuffers[i]->map();
+        }
 
         RenderSystem simpleRenderSystem{device, renderer.getSwapChainRenderPass()};
         Camera camera{};
@@ -72,8 +75,8 @@ namespace Engine {
 
                 GlobalUbo ubo{};
                 ubo.projectionView = camera.getProjection() * camera.getView();
-                globalUboBuffer.writeToIndex(&ubo, frameIndex);
-                globalUboBuffer.flushIndex(frameIndex);
+                uboBuffers[frameIndex]->writeToBuffer(&ubo);
+                uboBuffers[frameIndex]->flush();
 
                 renderer.beginSwapChainRenderPass(commandBuffer);
 
