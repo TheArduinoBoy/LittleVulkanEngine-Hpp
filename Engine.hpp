@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Device.hpp"
+#include "Descriptors.hpp"
 #include "GameObject.hpp"
 #include "Renderer.hpp"
 #include "Window.hpp"
@@ -27,6 +28,7 @@ namespace Engine {
         Device device{window};
         Renderer renderer{window, device};
 
+        std::unique_ptr<DescriptorPool> globalPool{};
         std::vector<GameObject> gameObjects;
     };
 }

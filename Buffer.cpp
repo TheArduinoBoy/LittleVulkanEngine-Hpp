@@ -55,9 +55,6 @@ namespace Engine {
      */
     vk::Result Buffer::map(vk::DeviceSize size, vk::DeviceSize offset) {
         assert(buffer && memory && "Called map on buffer before create");
-        if (size == VK_WHOLE_SIZE) {
-            return device.device().mapMemory(memory, 0, bufferSize, {}, &mapped);
-        }
         return device.device().mapMemory(memory, offset, size, {}, &mapped);
     }
     
