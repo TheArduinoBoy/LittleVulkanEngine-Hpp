@@ -14,13 +14,13 @@
 namespace Engine {
 
     struct PushConstantData {
-        glm::mat4 transform{1.f};
+        glm::mat4 modelMatrix{1.f};
         glm::mat4 normalMatrix{1.f};
     };
 
-    RenderSystem::RenderSystem(Device& device, vk::RenderPass renderPass)
+    RenderSystem::RenderSystem(Device& device, vk::RenderPass renderPass, vk::DescriptorSetLayout globalSetLayout)
         : device{device} {
-        createPipelineLayout();
+        createPipelineLayout(globalSetLayout);
         createPipeline(renderPass);
     }
 
@@ -28,10 +28,12 @@ namespace Engine {
         device.device().destroyPipelineLayout(pipelineLayout, nullptr);
     }
 
-    void RenderSystem::createPipelineLayout() {
+    void RenderSystem::createPipelineLayout(vk::DescriptorSetLayout globalSetLayout) {
         vk::PushConstantRange pushConstantRange{{vk::ShaderStageFlagBits::eVertex | vk::ShaderStageFlagBits::eFragment}, 0, sizeof(PushConstantData)};
 
-        vk::PipelineLayoutCreateInfo pipelineLayoutInfo{{}, 0, nullptr, 1, &pushConstantRange};
+        std::vector<vk::DescriptorSetLayout> descriptorSetLayout{globalSetLayout};
+
+        vk::PipelineLayoutCreateInfo pipelineLayoutInfo{{}, static_cast<uint32_t>(descriptorSetLayout.size()), descriptorSetLayout.data(), 1, &pushConstantRange};
         if (device.device().createPipelineLayout(&pipelineLayoutInfo, nullptr, &pipelineLayout) != vk::Result::eSuccess) {
             throw std::runtime_error("failed to create pipeline layout!");
         }
@@ -51,17 +53,14 @@ namespace Engine {
             pipelineConfig);
     }
 
-    void RenderSystem::renderGameObjects(
-        FrameInfo& frameInfo,
-        std::vector<GameObject>& gameObjects) {
+    void RenderSystem::renderGameObjects(FrameInfo& frameInfo, std::vector<GameObject>& gameObjects) {
         pipeline->bind(frameInfo.commandBuffer);
 
-        auto projectionView = frameInfo.camera.getProjection() * frameInfo.camera.getView();
+        frameInfo.commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 1, &frameInfo.globalDescriptorSet, 0, nullptr);
 
         for (auto& obj : gameObjects) {
             PushConstantData push{};
-            auto modelMatrix = obj.transform.mat4();
-            push.transform = projectionView * modelMatrix;
+            push.modelMatrix = obj.transform.mat4();
             push.normalMatrix = obj.transform.normalMatrix();
 
             vkCmdPushConstants(
