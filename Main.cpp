@@ -1,5 +1,5 @@
 
-#include "Engine.hpp"
+#include "Core.hpp"
 
 // std
 #include <cstdlib>
@@ -7,7 +7,7 @@
 #include <stdexcept>
 
 int main() {
-    Engine::Engine engine{};
+    Engine::Core engine{};
 
     try {
         engine.run();
