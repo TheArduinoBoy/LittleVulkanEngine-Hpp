@@ -31,7 +31,7 @@ namespace Engine {
             swapChain = std::make_unique<SwapChain>(device, extent, oldSwapChain);
 
             if (!oldSwapChain->compareSwapFormats(*swapChain.get())) {
-            throw std::runtime_error("Swap chain image(or depth) format has changed!");
+                throw std::runtime_error("Swap chain image(or depth) format has changed!");
             }
         }
     }

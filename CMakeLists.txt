@@ -10,7 +10,7 @@ find_package(Vulkan REQUIRED)
 find_package(SDL2 REQUIRED)
 find_package(tinyobjloader REQUIRED)
 
-add_executable(VulkanEngine Main.cpp Buffer.hpp Buffer.cpp Camera.cpp Camera.hpp Descriptors.cpp Descriptors.hpp Device.cpp Device.hpp Engine.cpp Engine.hpp GameObject.cpp GameObject.hpp Model.cpp Model.hpp MovementController.cpp MovementController.hpp Pipeline.cpp Pipeline.hpp Renderer.cpp Renderer.hpp RenderSystem.cpp RenderSystem.hpp SwapChain.cpp SwapChain.hpp Utils.hpp Window.cpp Window.hpp)
+add_executable(VulkanEngine Main.cpp Buffer.hpp Buffer.cpp Camera.cpp Camera.hpp Core.cpp Core.hpp Descriptors.cpp Descriptors.hpp Device.cpp Device.hpp GameObject.cpp GameObject.hpp Model.cpp Model.hpp MovementController.cpp MovementController.hpp Pipeline.cpp Pipeline.hpp Renderer.cpp Renderer.hpp RenderSystem.cpp RenderSystem.hpp SwapChain.cpp SwapChain.hpp Utils.hpp Window.cpp Window.hpp)
 target_compile_options(VulkanEngine PRIVATE -Wall -Wextra)
 target_link_libraries(VulkanEngine Vulkan::Vulkan SDL2 tinyobjloader)
 
