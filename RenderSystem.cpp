@@ -53,12 +53,14 @@ namespace Engine {
             pipelineConfig);
     }
 
-    void RenderSystem::renderGameObjects(FrameInfo& frameInfo, std::vector<GameObject>& gameObjects) {
+    void RenderSystem::renderGameObjects(FrameInfo& frameInfo) {
         pipeline->bind(frameInfo.commandBuffer);
 
         frameInfo.commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 1, &frameInfo.globalDescriptorSet, 0, nullptr);
 
-        for (auto& obj : gameObjects) {
+        for (auto& kv : frameInfo.gameObjects) {
+            auto& obj = kv.second;
+            if(obj.model == nullptr) continue;
             PushConstantData push{};
             push.modelMatrix = obj.transform.mat4();
             push.normalMatrix = obj.transform.normalMatrix();
